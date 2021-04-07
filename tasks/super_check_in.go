@@ -55,7 +55,6 @@ func GetSuperTopics(w *client.WeiboClient, ch chan<- [2]string) {
 	reg := regexp.MustCompile("[0-9a-z]{38}")
 	sinceId := ""
 	for {
-		log.Println(sinceId)
 		data, err := w.ContainerGetIndex("100803_-_followsuper", sinceId)
 		if err != nil {
 			log.Println("获取超话列表异常:" + err.Error())
