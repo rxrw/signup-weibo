@@ -25,7 +25,6 @@ func SuperCheckIn(w *client.WeiboClient, wg *sync.WaitGroup) {
 	go GetSuperTopics(w, ch)
 	for {
 		if item, ok := <-ch; ok {
-			log.Println(item)
 			data, err := w.SuperCheckin(item[1])
 			//响应例子{'code': '100000', 'msg': '已签到', 'data': {'tipMessage': '今日签到，经验值+4', 'alert_title': '今日签到 第14482名', 'alert_subtitle': '经验值+4', 'alert_activity': ''}}
 			if err != nil {
