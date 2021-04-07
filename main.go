@@ -22,7 +22,7 @@ import (
 // @return
 func main() {
 	var logPath string
-	flag.StringVar(&logPath, "l", "./WeiboTask.log", "日志文件路径,默认为./log.log")
+	flag.StringVar(&logPath, "l", "./WeiboTask.log", "日志文件路径,默认为./WeiboTask.log")
 	flag.Parse()
 
 	logFile, err := os.OpenFile(logPath, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0600)

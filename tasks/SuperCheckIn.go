@@ -9,8 +9,6 @@ import (
 	"regexp"
 	"sync"
 	"weibo/client"
-
-	mapset "github.com/deckarep/golang-set"
 )
 
 // @title         SuperCheckIn
@@ -56,14 +54,16 @@ func GetSuperTopics(w *client.WeiboClient, ch chan<- [2]string) {
 	defer close(ch)
 	reg := regexp.MustCompile("[0-9a-z]{38}")
 	sinceId := ""
-	allTopics := mapset.NewSet()
 	for {
+		log.Println(sinceId)
 		data, err := w.ContainerGetIndex("100803_-_followsuper", sinceId)
 		if err != nil {
 			log.Println("获取超话列表异常:" + err.Error())
 			break
 		}
-		sinceId, ok := data["data"].(map[string]interface{})["cardlistInfo"].(map[string]interface{})["since_id"]
+		var ok bool
+		sinceId, ok = data["data"].(map[string]interface{})["cardlistInfo"].(map[string]interface{})["since_id"].(string)
+
 		if !ok {
 			log.Println("获取超话列表sinceId错误")
 			break
@@ -86,11 +86,7 @@ func GetSuperTopics(w *client.WeiboClient, ch chan<- [2]string) {
 					if item["card_type"] == "8" {
 						name := item["title_sub"].(string)
 						id := reg.FindString(item["scheme"].(string))
-						if allTopics.Contains(name) {
-							return
-						}
 						ch <- [2]string{name, id}
-						allTopics.Add(name)
 					}
 				}
 			}
